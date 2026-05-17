@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-theme: var(--theme);
+}
+
+:root {
+  --theme: oklch(0.5 0.5 220);
+}
+
+.dark {
+  --theme: oklch(0.6 0.5 220);
+}
