@@ -11,8 +11,11 @@ function setOpacity(
   for (let i = 0; i < items.length; i++) {
     const el = items[i]
 
-    el.style.transition = transition ? `opacity ${speed}ms ease-in-out` : "none"
+    el.style.transition = transition
+      ? `opacity ${speed}ms linear, filter ${speed}ms linear`
+      : "none"
     el.style.opacity = i === index ? "1" : "0.1"
+    el.style.filter = i === index ? "blur(0px)" : "blur(3px)"
   }
 }
 
@@ -73,7 +76,6 @@ export default function VerticalTextMarquee({
       track.style.transform = `translateY(-${indexRef.current * itemHeight}px)`
 
       setOpacity(itemRefs.current, indexRef.current, false, opacitySpeed)
-      console.log(itemRefs.current.length, indexRef.current)
     }
 
     setup()

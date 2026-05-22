@@ -1,14 +1,24 @@
-import BottomBar from "./components/BottomBar"
 import CoolIntro from "./components/CoolIntro"
-import { ScrollArea } from "./components/ui/scroll-area"
+import Experiences from "./components/Experiences"
+import Projects from "./components/Projects"
+import Skills from "./components/Skills"
+import Contact from "./components/Contact"
+import SnapScroll from "./components/SnapScroll"
+import ThemeToggle from "./components/ThemeToggle"
+import GridBackground from "./components/GridBackground"
 
 export function App() {
   return (
     <>
-      <ScrollArea className="h-screen w-screen">
+      <GridBackground />
+      <ThemeToggle />
+      <SnapScroll>
         <CoolIntro />
-      </ScrollArea>
-      <BottomBar />
+        <Experiences />
+        <Projects />
+        <Skills />
+        <Contact />
+      </SnapScroll>
     </>
   )
 }

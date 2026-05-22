@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "Llyme/Kunoichi",
+    "name": "Kunoichi",
+    "description": "DLSU schedule simulator built with Electron!",
+    "url": "https://github.com/Llyme/Kunoichi",
+    "homepage": "",
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "openIssues": 0,
+    "license": "MIT",
+    "topics": [],
+    "languages": [
+      "JavaScript",
+      "CSS",
+      "HTML"
+    ],
+    "primaryLanguage": "JavaScript",
+    "pushedAt": "2018-06-25T14:50:40Z",
+    "createdAt": "2017-12-20T20:44:56Z"
+  }
+]

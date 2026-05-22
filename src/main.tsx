@@ -9,7 +9,7 @@ import { TooltipProvider } from "./components/ui/tooltip.tsx"
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider>
+    <ThemeProvider disableTransitionOnChange={false}>
       <TooltipProvider>
         <App />
       </TooltipProvider>

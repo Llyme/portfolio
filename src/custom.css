@@ -16,3 +16,202 @@
 .dark {
   --theme: oklch(0.6 0.5 220);
 }
+
+html,
+body,
+*,
+*::before,
+*::after {
+  transition: background-color 300ms ease, color 300ms ease,
+    border-color 300ms ease, fill 300ms ease, stroke 300ms ease;
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.grid-bg {
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+}
+
+.grid-dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  margin-left: -2px;
+  margin-top: -2px;
+  border-radius: 9999px;
+  background: var(--theme);
+  opacity: 1;
+  transform: scale(0.5);
+  will-change: transform;
+}
+
+
+@keyframes spark-streak {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0) rotate(var(--a)) translateY(var(--start, 0))
+      scaleY(0);
+  }
+  25% {
+    opacity: 1;
+    transform: translate(-50%, 0) rotate(var(--a)) translateY(var(--start, 0))
+      scaleY(1);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, 0) rotate(var(--a))
+      translateY(calc(var(--start, 0px) + var(--len, 18px))) scaleY(0);
+  }
+}
+
+@keyframes section-enter {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section-enter {
+  animation: section-enter 400ms ease-out backwards;
+}
+
+@keyframes enter-slide-right {
+  0% {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.enter-slide-right {
+  animation: enter-slide-right 900ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes enter-slide-left {
+  0% {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.enter-slide-left {
+  animation: enter-slide-left 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes enter-zoom {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.enter-zoom {
+  animation: enter-zoom 500ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+@keyframes enter-fade-rise {
+  0% {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.enter-fade-rise {
+  animation: enter-fade-rise 550ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+@keyframes typewriter-char {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.typewriter {
+  display: inline-block;
+  white-space: pre-wrap;
+}
+
+.typewriter > span {
+  display: inline-block;
+  opacity: 0;
+  animation: typewriter-char 1ms linear forwards;
+  white-space: pre;
+}
+
+@keyframes enter-mask {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.enter-mask {
+  animation: enter-mask 700ms cubic-bezier(0.65, 0, 0.35, 1) backwards;
+}
+
+.spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: var(--len, 18px);
+  border-radius: 9999px;
+  background: var(--c, var(--theme));
+  pointer-events: none;
+  transform-origin: center top;
+  animation: spark-streak var(--dur, 350ms) cubic-bezier(0.2, 0.6, 0.2, 1)
+    forwards;
+}
+
+.fade {
+  background: url(image.jpg);
+
+  mask-image: linear-gradient(to right,
+      transparent 0px,
+      black 32px,
+      black calc(100% - 32px),
+      transparent 100%),
+
+    linear-gradient(to bottom,
+      transparent 0px,
+      black 32px,
+      black calc(100% - 32px),
+      transparent 100%);
+
+  mask-composite: intersect;
+  -webkit-mask-composite: source-in;
+}
