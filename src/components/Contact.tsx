@@ -1,5 +1,4 @@
 import { useRef } from "react"
-import Text from "@/components/Text"
 import Anchor from "./AnchorIcon"
 import { socials } from "@/constants/socials"
 import { useEnterKey } from "@/hooks/useEnterKey"
