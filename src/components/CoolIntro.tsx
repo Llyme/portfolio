@@ -32,7 +32,7 @@ export default function CoolIntro() {
           ]}
         />
       </Text>
-      <div className="absolute bottom-0 flex w-full flex-0 items-center justify-end gap-6 px-12 pb-6">
+      <div className="absolute bottom-0 z-10 flex w-full flex-0 items-center justify-end gap-6 px-12 pb-16">
         <div className="flex flex-0 gap-6">
           {socials.map((s) => (
             <Anchor

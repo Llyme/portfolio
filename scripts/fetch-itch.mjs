@@ -37,21 +37,25 @@ async function fetchProfile() {
 }
 
 function parseCells(html) {
-  const cells = [
-    ...html.matchAll(
-      /<div data-game_id="(\d+)"[^>]*class="game_cell[^"]*"[\s\S]*?(?=<div data-game_id=|<\/div><\/div><\/div><\/div>)/g,
-    ),
+  // Cell openers: <div ... data-game_id="N" ... class="game_cell ...">
+  // Attribute order/extra attrs (e.g. dir="auto") vary, so don't assume any.
+  const starts = [
+    ...html.matchAll(/<div[^>]*data-game_id="(\d+)"[^>]*class="game_cell[^"]*"/g),
   ]
-  return cells.map((m) => {
+  return starts.map((m, i) => {
     const id = m[1]
-    const block = m[0]
-    const url = match1(block, /class="thumb_link game_link"[^>]*href="([^"]+)"/)
+    const block = html.slice(
+      m.index,
+      i + 1 < starts.length ? starts[i + 1].index : html.length,
+    )
+    // href may appear before or after class — grab the first itch.io game link.
+    const url = match1(block, /href="(https?:\/\/[^"/]+\.itch\.io\/[^"]+)"/)
     const image =
       match1(block, /data-gif="([^"]+)"/) ||
       match1(block, /data-lazy_src="([^"]+)"/)
     const title = match1(
       block,
-      /<a class="title game_link"[^>]*>([\s\S]*?)<\/a>/,
+      /<a[^>]*class="title game_link"[^>]*>([\s\S]*?)<\/a>/,
     )
     const description = match1(block, /class="game_text"[^>]*>([\s\S]*?)</)
     const genre = match1(block, /class="game_genre"[^>]*>([\s\S]*?)</)
@@ -70,6 +74,13 @@ function parseCells(html) {
 
 const html = await fetchProfile()
 const items = parseCells(html)
+
+// Guard: a failed/blocked scrape returns 0 cells. Don't clobber existing
+// good data with an empty array — keep the committed file instead.
+if (items.length === 0) {
+  console.warn(`itch: scraped 0 items — keeping existing ${OUT}`)
+  process.exit(0)
+}
 
 await mkdir(dirname(OUT), { recursive: true })
 await writeFile(OUT, JSON.stringify(items, null, 2) + "\n")

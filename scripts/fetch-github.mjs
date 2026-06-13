@@ -44,6 +44,12 @@ for (const slug of REPOS) {
   })
 }
 
+// Guard: don't clobber existing good data with an empty/failed fetch.
+if (items.length === 0) {
+  console.warn(`github: fetched 0 repos — keeping existing ${OUT}`)
+  process.exit(0)
+}
+
 await mkdir(dirname(OUT), { recursive: true })
 await writeFile(OUT, JSON.stringify(items, null, 2) + "\n")
 console.log(`wrote ${items.length} repos → ${OUT}`)

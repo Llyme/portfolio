@@ -60,8 +60,8 @@ const itchProjects: Project[] = itch.map((g) => ({
 
 const staticProjects: Project[] = [
   {
-    title: "Point-of-Sale System",
-    year: "2023",
+    title: "EISA POS",
+    year: "2022",
     blurb:
       "Modular Electron point-of-sale system with role-based auth, product/menu and order management, payment handling and audit logging — backed by an encrypted SQLite store, with reusable in-app UI modules (calculator, context menu, file explorer) and serial-port device integration.",
     tags: ["Electron", "SQLite", "Node.js"],

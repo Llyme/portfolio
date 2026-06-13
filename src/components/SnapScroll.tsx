@@ -337,6 +337,9 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
           align: "start",
           watchDrag: (emblaApi, e) => {
             const t = e.target as HTMLElement | null
+            // Let links/buttons receive their own clicks instead of being
+            // captured by carousel drag.
+            if (t?.closest("a, button")) return false
             const sc =
               t?.closest<HTMLElement>("[data-scrollable]") ??
               (() => {

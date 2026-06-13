@@ -4,6 +4,7 @@ import {
   FaItchIo,
   FaSteam,
   FaEnvelope,
+  FaFilePdf,
 } from "react-icons/fa"
 import type { IconType } from "react-icons"
 
@@ -15,6 +16,12 @@ export type Social = {
 }
 
 export const socials: Social[] = [
+  {
+    tooltip: "Resume",
+    link: "https://docs.google.com/document/d/1StMDsKmgIZivyhPcbz1hg675Mq3Qo6Y2Apw2MZuXkNo/export?format=pdf",
+    Icon: FaFilePdf,
+    tab: true,
+  },
   {
     tooltip: "Email",
     link: "mailto:michael.edmund.wong@gmail.com",

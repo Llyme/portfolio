@@ -79,6 +79,12 @@ const items = details
   }))
   .sort((a, b) => b.subscriptions - a.subscriptions)
 
+// Guard: don't clobber existing good data with an empty/failed scrape.
+if (items.length === 0) {
+  console.warn(`workshop: scraped 0 items — keeping existing ${OUT}`)
+  process.exit(0)
+}
+
 await mkdir(dirname(OUT), { recursive: true })
 await writeFile(OUT, JSON.stringify(items, null, 2) + "\n")
 console.log(`wrote ${items.length} items → ${OUT}`)
