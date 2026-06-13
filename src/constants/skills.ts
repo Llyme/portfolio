@@ -28,6 +28,11 @@ import {
   SiClojure,
   SiGithubactions,
   SiCircleci,
+  SiElasticsearch,
+  SiOpentelemetry,
+  SiTurborepo,
+  SiPoetry,
+  SiElectron,
 } from "react-icons/si"
 import { FaJava } from "react-icons/fa"
 import { TbBrandCSharp } from "react-icons/tb"
@@ -203,5 +208,36 @@ export const skills: Skill[] = [
     color: "#000000",
     mono: true,
     groups: ["devops"],
+  },
+  {
+    name: "Elasticsearch",
+    Icon: SiElasticsearch,
+    color: "#005571",
+    groups: ["backend", "data"],
+  },
+  {
+    name: "OpenTelemetry",
+    Icon: SiOpentelemetry,
+    color: "#000000",
+    mono: true,
+    groups: ["devops", "backend"],
+  },
+  {
+    name: "Turborepo",
+    Icon: SiTurborepo,
+    color: "#EF4444",
+    groups: ["frontend", "devops"],
+  },
+  {
+    name: "Poetry",
+    Icon: SiPoetry,
+    color: "#60A5FA",
+    groups: ["backend"],
+  },
+  {
+    name: "Electron",
+    Icon: SiElectron,
+    color: "#47848F",
+    groups: ["frontend", "backend"],
   },
 ]

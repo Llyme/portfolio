@@ -73,7 +73,12 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
     let boundaryReachedAt = 0
     let lastBoundaryKey = ""
 
+    // Radix mounts dialog content only while open; suppress snap nav then.
+    const isModalOpen = () => !!document.querySelector('[data-slot="dialog-content"]')
+
     const onWheel = (e: WheelEvent) => {
+      if (isModalOpen()) return
+
       const speed = Math.abs(e.deltaY)
 
       if (speed < 5) return
@@ -128,6 +133,7 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
     }
 
     const onKey = (e: KeyboardEvent) => {
+      if (isModalOpen()) return
       if (e.key === "ArrowDown" || e.key === "PageDown") {
         e.preventDefault()
         go(1)
@@ -147,6 +153,7 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
     let touchAtBottom = false
     let touchScrollable: HTMLElement | null = null
     const onTouchStart = (e: TouchEvent) => {
+      if (isModalOpen()) return
       if (e.touches.length !== 1) return
       const t = e.target as HTMLElement | null
       const sc =
@@ -330,7 +337,6 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
           align: "start",
           watchDrag: (emblaApi, e) => {
             const t = e.target as HTMLElement | null
-            const isTouch = (e as PointerEvent).pointerType === "touch"
             const sc =
               t?.closest<HTMLElement>("[data-scrollable]") ??
               (() => {
@@ -340,7 +346,7 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
                 )[emblaApi.selectedScrollSnap()]
                 return slide?.querySelector<HTMLElement>("[data-scrollable]") ?? null
               })()
-            if (!isTouch && t?.closest("[data-no-drag]") && sc) return false
+            if (t?.closest("[data-no-drag]")) return false
             if (!sc) return true
             const atTop = sc.scrollTop <= 2
             const atBottom =

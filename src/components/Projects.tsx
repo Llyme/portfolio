@@ -3,112 +3,24 @@ import { useEnterKey } from "@/hooks/useEnterKey"
 import Text from "@/components/Text"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
 import { FiExternalLink, FiEye, FiHeart, FiUsers } from "react-icons/fi"
-import workshop from "@/constants/workshop.json"
-import itch from "@/constants/itch.json"
-import github from "@/constants/github.json"
-
-type Category = "mods" | "games" | "tools"
-
-type Project = {
-  title: string
-  year: string
-  blurb: string
-  tags: string[]
-  image?: string
-  link?: string
-  category: Category
-  simple?: boolean
-  stats?: { subs?: number; favorites?: number; views?: number }
-  workshopTags?: string[]
-  repoTags?: string[]
-}
-
-const APP_TAGS: Record<string, string[]> = {
-  RimWorld: ["C#", "RimWorld", "Modding"],
-  Starbound: ["Lua", "Starbound", "Modding"],
-}
-
-function truncate(s: string, n: number) {
-  const clean = s.replace(/\s+/g, " ").trim()
-  return clean.length > n ? clean.slice(0, n - 1).trimEnd() + "…" : clean
-}
+import {
+  CATEGORIES,
+  projects,
+  type Category,
+  type Project,
+} from "@/constants/projects"
 
 function formatCount(n: number) {
   if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K`
   return String(n)
 }
-
-const steamProjects: Project[] = workshop.map((w) => ({
-  title: w.title,
-  year: new Date(w.created * 1000).getUTCFullYear().toString(),
-  blurb: truncate(w.description, 160),
-  tags: APP_TAGS[w.app] ?? [w.app, "Modding"],
-  workshopTags: (w.tags ?? []).filter(Boolean),
-  image: w.preview,
-  link: w.url,
-  category: "mods",
-  stats: {
-    subs: w.subscriptions,
-    favorites: w.favorites,
-    views: w.views,
-  },
-}))
-
-const PILLAR_MAGE_YEAR = "2023"
-
-const itchProjects: Project[] = itch.map((g) => ({
-  title: g.title,
-  year: g.id === "2221169" ? PILLAR_MAGE_YEAR : "",
-  blurb: g.description,
-  tags: [g.genre, ...g.platforms, "Unity"].filter(Boolean),
-  image: g.image,
-  link: g.url,
-  category: "games",
-}))
-
-const staticProjects: Project[] = [
-  {
-    title: "EISA Payroll",
-    year: "2023",
-    blurb: "ElectronJS app for employee wage management.",
-    tags: ["Electron", "React", "SQLite"],
-    category: "tools",
-    simple: true,
-  },
-  {
-    title: "Engineering Intelligence Platform",
-    year: "2025",
-    blurb:
-      "Bitbucket + Jira integration with local Ollama for programming insights.",
-    tags: ["FastAPI", "Ollama", "Microservices"],
-    category: "tools",
-    simple: true,
-  },
-  ...github
-    .filter((g) => g.slug === "Llyme/Kunoichi")
-    .map<Project>((g) => ({
-      title: "Kunoichi Schedule Sim",
-      year: new Date(g.createdAt).getUTCFullYear().toString(),
-      blurb: g.description,
-      tags: ["Electron"],
-      repoTags: [...g.languages, g.license].filter(Boolean),
-      link: g.url,
-      category: "tools",
-    })),
-]
-
-const projects: Project[] = [
-  ...steamProjects,
-  ...itchProjects,
-  ...staticProjects,
-]
-
-const CATEGORIES: { id: Category; label: string }[] = [
-  { id: "mods", label: "Steam Mods" },
-  { id: "games", label: "Games" },
-  { id: "tools", label: "Tools" },
-]
 
 const OVERSCROLL_THRESHOLD = 80
 const BOUNDARY_COOLDOWN_MS = 300
@@ -128,10 +40,7 @@ function ProjectRow({
     return <SimpleRow p={p} flip={flip} enterClass={enterClass} delay={delay} />
   return (
     <li className={enterClass} style={{ animationDelay: `${delay ?? 0}ms` }}>
-      <a
-        href={p.link ?? "#"}
-        target={p.link ? "_blank" : undefined}
-        rel="noreferrer"
+      <div
         className={`relative grid grid-cols-1 items-center gap-4 md:gap-8 ${
           flip
             ? "md:grid-cols-[minmax(min-content,1fr)_380px]"
@@ -139,32 +48,58 @@ function ProjectRow({
         }`}
       >
         <div className={`relative ${flip ? "md:order-2" : "md:order-1"}`}>
-          <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-foreground/10 bg-gradient-to-br from-zinc-700 to-zinc-900 shadow">
-            {p.image ? (
-              <img
-                src={p.image}
-                alt={p.title}
-                loading="lazy"
-                className="h-full w-full object-cover"
-              />
-            ) : (
+          {p.image ? (
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  type="button"
+                  className="relative block aspect-video w-full cursor-zoom-in overflow-hidden rounded-lg border border-foreground/10 bg-gradient-to-br from-zinc-700 to-zinc-900 shadow"
+                >
+                  <img
+                    src={p.image}
+                    alt={p.title}
+                    loading="lazy"
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              </DialogTrigger>
+              <DialogContent className="w-auto max-w-[92vw] border-none bg-transparent p-0 ring-0 sm:max-w-[92vw]">
+                <DialogTitle className="sr-only">{p.title}</DialogTitle>
+                <img
+                  src={p.image}
+                  alt={p.title}
+                  className="block h-auto max-h-[88vh] w-auto max-w-[92vw] rounded-lg object-contain"
+                />
+              </DialogContent>
+            </Dialog>
+          ) : (
+            <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-foreground/10 bg-gradient-to-br from-zinc-700 to-zinc-900 shadow">
               <div className="text-theme/40 flex h-full w-full items-center justify-center font-mono text-[10px] tracking-widest uppercase">
                 {p.tags[0]}
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
         <Card
           className={`overflow-visible ${flip ? "md:order-1 md:text-right" : "md:order-2"}`}
         >
           <CardHeader className="!flex !grid-cols-none items-center justify-between gap-6">
             <CardTitle className="inline-flex items-center gap-2 text-xl leading-tight font-bold whitespace-nowrap lg:text-2xl">
-              <span>{p.title}</span>
-              {p.link && (
-                <FiExternalLink
-                  className="text-theme h-4 w-4 shrink-0 opacity-80"
-                  aria-hidden
-                />
+              {p.link ? (
+                <a
+                  href={p.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 hover:underline"
+                >
+                  <span>{p.title}</span>
+                  <FiExternalLink
+                    className="text-theme h-4 w-4 shrink-0 opacity-80"
+                    aria-hidden
+                  />
+                </a>
+              ) : (
+                <span>{p.title}</span>
               )}
             </CardTitle>
             <Text className="text-theme shrink-0 font-mono text-xs tracking-[0.3em] whitespace-nowrap uppercase">
@@ -229,7 +164,7 @@ function ProjectRow({
             </div>
           </CardContent>
         </Card>
-      </a>
+      </div>
     </li>
   )
 }
@@ -245,14 +180,9 @@ function SimpleRow({
   enterClass?: string
   delay?: number
 }) {
-  const Wrapper: React.ElementType = p.link ? "a" : "div"
-  const wrapperProps = p.link
-    ? { href: p.link, target: "_blank", rel: "noreferrer" }
-    : {}
   return (
     <li className={enterClass} style={{ animationDelay: `${delay ?? 0}ms` }}>
-      <Wrapper
-        {...wrapperProps}
+      <div
         className={`grid grid-cols-1 items-center gap-4 md:gap-8 ${
           flip
             ? "md:grid-cols-[minmax(min-content,1fr)_380px]"
@@ -264,12 +194,21 @@ function SimpleRow({
         >
           <CardHeader className="!flex !grid-cols-none items-center justify-between gap-6">
             <CardTitle className="inline-flex items-center gap-2 text-xl leading-tight font-bold whitespace-nowrap lg:text-2xl">
-              <span>{p.title}</span>
-              {p.link && (
-                <FiExternalLink
-                  className="text-theme h-4 w-4 shrink-0 opacity-80"
-                  aria-hidden
-                />
+              {p.link ? (
+                <a
+                  href={p.link}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 hover:underline"
+                >
+                  <span>{p.title}</span>
+                  <FiExternalLink
+                    className="text-theme h-4 w-4 shrink-0 opacity-80"
+                    aria-hidden
+                  />
+                </a>
+              ) : (
+                <span>{p.title}</span>
               )}
             </CardTitle>
             <Text className="text-theme shrink-0 font-mono text-xs tracking-[0.3em] whitespace-nowrap uppercase">
@@ -338,7 +277,7 @@ function SimpleRow({
           className={`hidden md:block ${flip ? "md:order-2" : "md:order-1"}`}
           aria-hidden
         />
-      </Wrapper>
+      </div>
     </li>
   )
 }
@@ -392,6 +331,9 @@ export default function Projects() {
     if (!sc) return
     if (e.pointerType === "mouse" && e.button !== 0) return
     if (e.pointerType === "touch") return
+    // Let interactive elements (image lightbox button, title link) handle
+    // their own clicks instead of starting a grab-to-scroll drag.
+    if ((e.target as HTMLElement).closest("button, a")) return
     const section = e.currentTarget
     section.setPointerCapture(e.pointerId)
     let lastY = e.clientY
@@ -493,7 +435,9 @@ export default function Projects() {
                           p={p}
                           flip={i % 2 === 1}
                           enterClass={
-                            i % 2 === 1 ? "enter-slide-left" : "enter-slide-right"
+                            i % 2 === 1
+                              ? "enter-slide-left"
+                              : "enter-slide-right"
                           }
                           delay={i * 90}
                         />
