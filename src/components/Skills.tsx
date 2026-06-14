@@ -60,7 +60,7 @@ function SparkBurst({
 }
 
 function computeBallSize(w: number) {
-  if (w < 640) return 56
+  if (w < 640) return 40
   if (w < 1024) return 80
   return 110
 }
@@ -276,37 +276,35 @@ export default function Skills() {
     >
       <div
         key={`text-${enterKey}-${group}`}
-        className={`pointer-events-none absolute top-[55%] left-1/2 z-10 max-w-3xl -translate-x-1/2 -translate-y-1/2 px-8 text-center ${enterKey === 0 ? "opacity-0" : "section-enter"}`}
+        className={`pointer-events-none absolute top-[55%] left-1/2 z-10 w-[92vw] max-w-3xl -translate-x-1/2 -translate-y-1/2 px-4 text-center sm:px-8 ${enterKey === 0 ? "opacity-0" : "section-enter"}`}
       >
-        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-3 text-lg font-semibold sm:gap-x-6 sm:gap-y-5 sm:text-2xl lg:gap-x-8 lg:gap-y-6 lg:text-3xl">
-          {filteredSkills.map((s, i) => (
-            <span key={s.name} className="inline-flex items-center gap-x-3 sm:gap-x-4">
-              <span className="inline-flex items-center gap-2">
-                <s.Icon
-                  className="h-5 w-5 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
-                  style={{ color: s.mono ? undefined : s.color }}
-                />
-                <Text>{s.name}</Text>
-              </span>
-              {i < filteredSkills.length - 1 && (
-                <span className="text-theme opacity-60">·</span>
-              )}
+        <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-sm font-semibold sm:gap-x-6 sm:gap-y-5 sm:text-2xl lg:gap-x-8 lg:gap-y-6 lg:text-3xl">
+          {filteredSkills.map((s) => (
+            <span
+              key={s.name}
+              className="inline-flex items-center gap-1.5 rounded-full bg-white/60 px-2.5 py-1 backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-1.5 dark:bg-black/50"
+            >
+              <s.Icon
+                className="h-4 w-4 sm:h-7 sm:w-7 lg:h-8 lg:w-8"
+                style={{ color: s.mono ? undefined : s.color }}
+              />
+              <Text>{s.name}</Text>
             </span>
           ))}
         </div>
       </div>
       <div
         key={`tabs-${enterKey}`}
-        className={`absolute top-[8vh] left-1/2 z-20 w-[92vw] max-w-3xl -translate-x-1/2 ${enterKey === 0 ? "opacity-0" : "section-enter"}`}
+        className={`absolute top-[13vh] left-1/2 z-20 w-[92vw] max-w-3xl -translate-x-1/2 ${enterKey === 0 ? "opacity-0" : "section-enter"}`}
       >
         <Tabs
           value={group}
           onValueChange={(v) => setGroup(v as SkillGroup)}
           data-no-drag
         >
-          <TabsList variant="line" className="mx-auto">
+          <TabsList variant="line" className="mx-auto flex-wrap justify-center">
             {SKILL_GROUPS.map((g) => (
-              <TabsTrigger key={g.id} value={g.id}>
+              <TabsTrigger key={g.id} value={g.id} className="flex-none">
                 {g.label}
               </TabsTrigger>
             ))}
