@@ -117,6 +117,120 @@ body,
   animation: enter-slide-left 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
+@keyframes enter-slide-up {
+  0% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.enter-slide-up {
+  animation: enter-slide-up 700ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+
+/* Exhibit spotlight: a light cone shines down from above onto each item.
+   The "cast" layer lives inside the item's overflow-hidden box, so only the
+   cone ∩ item overlap is brightened (mix-blend screen lightens the image). */
+/* Exhibit spotlight. A lit cone (top 44–56%, widening to 12–88% at the
+   bottom) is left at full image brightness; two dark panels flank it so the
+   rest of the item goes near-black. A faint shaft sits above, sharing the
+   cone's edge angle so they line up at the item's top edge. */
+.spotlight-shade-l,
+.spotlight-shade-r {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.82);
+  filter: blur(2px);
+  pointer-events: none;
+}
+/* Lit pool = trapezoid: top edge is the middle 50% (25–75%), bottom edge is
+   the full item width. The dark is just the two top-corner triangles. */
+.spotlight-shade-l {
+  clip-path: polygon(0 0, 25% 0, 0 100%);
+}
+.spotlight-shade-r {
+  clip-path: polygon(75% 0, 100% 0, 100% 100%);
+}
+
+/* The shaft above the item. Height is 25% of the (square) item so its edge
+   slope matches the pool's exactly: pool sides run 25%→0% over the full
+   width (slope -0.25); over a 0.25×W-tall shaft that means top edges at
+   31.25%/68.75%, meeting the pool's 25%/75% at the item's top edge. This
+   keeps the angle continuous at any responsive size. */
+.spotlight-beam {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 100%;
+  height: 25%;
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.04),
+    rgba(255, 255, 255, 0.22)
+  );
+  clip-path: polygon(31.25% 0, 68.75% 0, 75% 100%, 25% 100%);
+  mix-blend-mode: screen;
+  filter: blur(2px);
+  pointer-events: none;
+}
+
+/* Full-item blackout that fades off at start: the exhibit is dark, then the
+   light snaps on (with a flicker) revealing the lit pool. */
+.spotlight-blackout {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  pointer-events: none;
+  /* steps(1) => hard on/off snaps, no eased fade. */
+  animation: spotlight-blackout 600ms steps(1, end) both;
+  animation-delay: var(--delay, 0ms);
+}
+
+/* 1 = dark, 0 = lit. off -> on -> off -> settle on. */
+@keyframes spotlight-blackout {
+  0%,
+  28% {
+    opacity: 1;
+  }
+  44% {
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  76%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Shaft snaps on in sync (inverse of the blackout). */
+@keyframes spotlight-on {
+  0%,
+  28% {
+    opacity: 0;
+  }
+  44% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 0;
+  }
+  76%,
+  100% {
+    opacity: 1;
+  }
+}
+
+.spotlight-beam {
+  animation: spotlight-on 600ms steps(1, end) both;
+  animation-delay: var(--delay, 0ms);
+}
+
 @keyframes enter-zoom {
   0% {
     opacity: 0;
