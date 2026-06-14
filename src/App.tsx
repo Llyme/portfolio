@@ -16,9 +16,9 @@ export function App() {
       <SnapScroll>
         <CoolIntro />
         <Experiences />
+        <Skills />
         <Projects />
         <Art />
-        <Skills />
         <Contact />
       </SnapScroll>
     </>

@@ -14,8 +14,8 @@ function setOpacity(
     el.style.transition = transition
       ? `opacity ${speed}ms linear, filter ${speed}ms linear`
       : "none"
-    el.style.opacity = i === index ? "1" : "0.1"
-    el.style.filter = i === index ? "blur(0px)" : "blur(3px)"
+    el.style.opacity = i === index ? "1" : "0.2"
+    el.style.filter = i === index ? "blur(0px)" : "blur(6px)"
   }
 }
 
@@ -66,11 +66,16 @@ export default function VerticalTextMarquee({
       return value
     }
 
+    let cancelled = false
+    let stepTimeout: number | undefined
+    let resetTimeout: number | undefined
+
     const setup = () => {
       measure()
       const repeatCount = computeRepeats()
 
       indexRef.current = base * Math.floor(repeatCount / 2)
+      isPausedRef.current = false
 
       track.style.transition = "none"
       track.style.transform = `translateY(-${indexRef.current * itemHeight}px)`
@@ -83,6 +88,7 @@ export default function VerticalTextMarquee({
     window.addEventListener("resize", setup)
 
     const step = () => {
+      if (cancelled) return
       if (isPausedRef.current) return
 
       indexRef.current = indexRef.current + 1
@@ -94,7 +100,8 @@ export default function VerticalTextMarquee({
 
       // seamless reset when reaching end buffer
       if (indexRef.current % base == 0) {
-        setTimeout(() => {
+        resetTimeout = window.setTimeout(() => {
+          if (cancelled) return
           track.style.transition = "none"
 
           indexRef.current =
@@ -110,16 +117,19 @@ export default function VerticalTextMarquee({
 
       isPausedRef.current = true
 
-      setTimeout(() => {
+      stepTimeout = window.setTimeout(() => {
         isPausedRef.current = false
         step()
       }, delay)
     }
 
-    const start = setTimeout(step, 800)
+    const start = window.setTimeout(step, 800)
 
     return () => {
+      cancelled = true
       clearTimeout(start)
+      clearTimeout(stepTimeout)
+      clearTimeout(resetTimeout)
       window.removeEventListener("resize", setup)
     }
   }, [delay, items.length, moveSpeed, opacitySpeed, repeatCount])
@@ -132,6 +142,7 @@ export default function VerticalTextMarquee({
           .map((text, i) => (
             <div
               key={i}
+              className="whitespace-nowrap"
               ref={(el) => {
                 if (el) itemRefs.current[i] = el
               }}

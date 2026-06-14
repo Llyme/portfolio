@@ -335,27 +335,12 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
         orientation="vertical"
         opts={{
           align: "start",
-          watchDrag: (emblaApi, e) => {
-            const t = e.target as HTMLElement | null
-            // Let links/buttons receive their own clicks instead of being
-            // captured by carousel drag.
-            if (t?.closest("a, button")) return false
-            const sc =
-              t?.closest<HTMLElement>("[data-scrollable]") ??
-              (() => {
-                const root = rootRef.current
-                const slide = root?.querySelectorAll<HTMLElement>(
-                  "[data-slot=carousel-item]"
-                )[emblaApi.selectedScrollSnap()]
-                return slide?.querySelector<HTMLElement>("[data-scrollable]") ?? null
-              })()
-            if (t?.closest("[data-no-drag]")) return false
-            if (!sc) return true
-            const atTop = sc.scrollTop <= 2
-            const atBottom =
-              sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 2
-            return atTop || atBottom
-          },
+          // Page navigation is driven exclusively through go() (wheel, keys,
+          // touchend). Embla's own pointer drag is disabled so a single swipe
+          // can't both Embla-snap AND trigger go() — that double-advance was
+          // skipping a page. Inner [data-scrollable] content still scrolls via
+          // native overflow, unaffected by this.
+          watchDrag: false,
         }}
         setApi={setApi}
         className="h-svh w-screen"
@@ -409,7 +394,7 @@ export default function SnapScroll({ children, cooldownMs = 700 }: Props) {
           <ChevronDown className="h-5 w-5" />
         </button>
       )}
-      <div className="fixed top-1/2 right-6 z-50 flex -translate-y-1/2 flex-col items-center gap-3">
+      <div className="fixed top-1/2 right-6 z-50 hidden -translate-y-1/2 flex-col items-center gap-3 sm:flex">
         {sections.map((_, i) => {
           const info = sectionInfo[i]
           const active = i === selected

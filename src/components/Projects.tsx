@@ -83,8 +83,8 @@ function ProjectRow({
         <Card
           className={`overflow-visible ${flip ? "md:order-1 md:text-right" : "md:order-2"}`}
         >
-          <CardHeader className="!flex !grid-cols-none items-center justify-between gap-6">
-            <CardTitle className="inline-flex items-center gap-2 text-xl leading-tight font-bold whitespace-nowrap lg:text-2xl">
+          <CardHeader className="!flex !grid-cols-none flex-col items-start justify-between gap-1 sm:flex-row sm:items-center sm:gap-6">
+            <CardTitle className="inline-flex items-center gap-2 text-xl leading-tight font-bold whitespace-normal sm:whitespace-nowrap lg:text-2xl">
               {p.link ? (
                 <a
                   href={p.link}
@@ -192,8 +192,8 @@ function SimpleRow({
         <Card
           className={`overflow-visible ${flip ? "md:order-1 md:text-right" : "md:order-2"}`}
         >
-          <CardHeader className="!flex !grid-cols-none items-center justify-between gap-6">
-            <CardTitle className="inline-flex items-center gap-2 text-xl leading-tight font-bold whitespace-nowrap lg:text-2xl">
+          <CardHeader className="!flex !grid-cols-none flex-col items-start justify-between gap-1 sm:flex-row sm:items-center sm:gap-6">
+            <CardTitle className="inline-flex items-center gap-2 text-xl leading-tight font-bold whitespace-normal sm:whitespace-nowrap lg:text-2xl">
               {p.link ? (
                 <a
                   href={p.link}
@@ -400,7 +400,7 @@ export default function Projects() {
       data-section-tabs={JSON.stringify(tabsWithHeight)}
       data-active-tab={active}
       onPointerDown={onPointerDown}
-      className="relative flex h-svh w-full cursor-grab flex-col items-center px-20 active:cursor-grabbing md:px-24"
+      className="relative flex h-svh w-full cursor-grab flex-col items-center px-4 active:cursor-grabbing sm:px-20 md:px-24"
     >
       <div className="relative min-h-0 w-full max-w-7xl flex-1">
         <div

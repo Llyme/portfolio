@@ -62,11 +62,17 @@ function ExperienceCard({
   return (
     <div className="relative">
       {end && (
-        <div className="absolute top-2 z-10" style={{ left: "-82px" }}>
+        <div
+          className="absolute top-2 z-10 hidden sm:block"
+          style={{ left: "-82px" }}
+        >
           <DatePill label={end} showPulse={isCurrent} />
         </div>
       )}
-      <div className="absolute bottom-2 z-10" style={{ left: "-82px" }}>
+      <div
+        className="absolute bottom-2 z-10 hidden sm:block"
+        style={{ left: "-82px" }}
+      >
         <DatePill label={start} />
       </div>
       <Card>
@@ -77,6 +83,17 @@ function ExperienceCard({
               {e.company}
             </Text>
             <Text className="text-xs opacity-60">· {e.location}</Text>
+          </div>
+          <div className="mt-1.5 flex items-center gap-1.5 sm:hidden">
+            {isCurrent && (
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+            )}
+            <Text className="text-[11px] font-semibold tracking-wide uppercase opacity-70">
+              {e.period}
+            </Text>
           </div>
         </CardHeader>
         <CardContent>
@@ -184,7 +201,7 @@ export default function Experiences() {
       ref={sectionRef}
       data-no-drag
       onPointerDown={onPointerDown}
-      className="relative flex h-svh w-full cursor-grab flex-col items-center px-8 active:cursor-grabbing"
+      className="relative flex h-svh w-full cursor-grab flex-col items-center px-4 active:cursor-grabbing sm:px-8"
     >
       <div className="relative min-h-0 w-full max-w-2xl flex-1">
         <div
@@ -194,10 +211,10 @@ export default function Experiences() {
         >
           <div
             key={`exp-${enterKey}`}
-            className="relative z-10 flex flex-col gap-12 pt-[20vh] pb-[30vh] pl-28"
+            className="relative z-10 flex flex-col gap-12 pt-[20vh] pb-[30vh] pl-0 sm:pl-28"
           >
             <div
-              className="via-theme/60 absolute top-0 bottom-0 left-[104px] w-px bg-gradient-to-b from-transparent to-transparent"
+              className="via-theme/60 absolute top-0 bottom-0 left-[104px] hidden w-px bg-gradient-to-b from-transparent to-transparent sm:block"
               aria-hidden
             />
             {experiences.map((e, i) => (

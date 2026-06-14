@@ -6,7 +6,7 @@ import { socials } from "@/constants/socials"
 export default function CoolIntro() {
   return (
     <div className="fade relative h-svh items-center justify-between gap-7 overflow-hidden select-none">
-      <Text className="absolute top-1/2 left-0 z-1 w-full -translate-y-1/2 p-16 text-center text-3xl lg:text-7xl">
+      <Text className="absolute top-1/2 left-0 z-1 w-full -translate-y-1/2 px-6 py-16 text-center text-2xl sm:p-16 sm:text-3xl lg:text-7xl">
         Hi, I'm <Text className="text-theme">Michael</Text>,{" "}
         <VerticalTextMarquee
           className="text-left"
@@ -32,14 +32,15 @@ export default function CoolIntro() {
           ]}
         />
       </Text>
-      <div className="absolute bottom-0 z-10 flex w-full flex-0 items-center justify-end gap-6 px-12 pb-16">
-        <div className="flex flex-0 gap-6">
+      <div className="absolute bottom-0 z-10 flex w-full items-center justify-center gap-6 px-6 pb-16 sm:justify-end sm:px-12">
+        <div className="flex flex-wrap justify-center gap-4 sm:gap-6">
           {socials.map((s) => (
             <Anchor
               key={s.tooltip}
               tooltip={s.tooltip}
               link={s.link}
               tab={s.tab}
+              className="h-7 w-7 sm:h-8 sm:w-8"
             >
               <s.Icon className="h-full w-full" />
             </Anchor>
